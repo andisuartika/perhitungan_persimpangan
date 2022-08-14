@@ -12,10 +12,10 @@ class HomeScreen extends StatelessWidget {
     Widget header() {
       return Container(
         margin: EdgeInsets.only(
-          top: 10,
+          top: 30,
           right: 30,
           left: 30,
-          bottom: 30,
+          bottom: 10,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -24,37 +24,44 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Hello, Yuri',
+                  'Hallo, Selamat Datang!',
                   style: primaryTextStyle.copyWith(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: semiBold,
                   ),
                 ),
-                Row(
-                  children: [
-                    Image.asset(
-                      "assets/location-icon.png",
-                      width: 18,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      "Denpasar, Bali",
-                      style: primaryTextStyle.copyWith(
-                        fontSize: 12,
-                        fontWeight: regular,
-                      ),
-                    )
-                  ],
-                )
+                Text(
+                  'Perhitungan Persimpangan',
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 12,
+                    fontWeight: regular,
+                  ),
+                ),
+                // Row(
+                //   children: [
+                //     Image.asset(
+                //       "assets/location-icon.png",
+                //       width: 18,
+                //     ),
+                //     SizedBox(
+                //       width: 5,
+                //     ),
+                //     Text(
+                //       "Denpasar, Bali",
+                //       style: primaryTextStyle.copyWith(
+                //         fontSize: 12,
+                //         fontWeight: regular,
+                //       ),
+                //     )
+                //   ],
+                // )
               ],
             ),
-            ClipOval(
-                child: Image.asset(
-              "assets/profile.png",
-              width: 50,
-            ))
+            // ClipOval(
+            //     child: Image.asset(
+            //   "assets/profile.png",
+            //   width: 50,
+            // ))
           ],
         ),
       );
@@ -116,8 +123,7 @@ class HomeScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        KakiSimpangScreen(simpang: "Kaki Simpang Selatan"),
+                    builder: (context) => KakiSimpangScreen(simpang: "SELATAN"),
                   ),
                 );
               },
@@ -154,8 +160,7 @@ class HomeScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        KakiSimpangScreen(simpang: "Kaki Simpang Utara"),
+                    builder: (context) => KakiSimpangScreen(simpang: "UTARA"),
                   ),
                 );
               },
@@ -192,8 +197,7 @@ class HomeScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        KakiSimpangScreen(simpang: "Kaki Simpang Timur"),
+                    builder: (context) => KakiSimpangScreen(simpang: "TIMUR"),
                   ),
                 );
               },
@@ -230,8 +234,7 @@ class HomeScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        KakiSimpangScreen(simpang: "Kaki Simpang Barat"),
+                    builder: (context) => KakiSimpangScreen(simpang: "BARAT"),
                   ),
                 );
               },

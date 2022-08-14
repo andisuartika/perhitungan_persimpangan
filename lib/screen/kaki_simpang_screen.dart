@@ -19,7 +19,7 @@ class _KakiSimpangScreenState extends State<KakiSimpangScreen> {
         backgroundColor: primaryColor,
         centerTitle: true,
         title: Text(
-          widget.simpang,
+          'KAKI SIMPANG ${widget.simpang}',
           style: whiteTextStyle.copyWith(
             fontSize: 16,
             fontWeight: semiBold,
@@ -45,44 +45,6 @@ class _KakiSimpangScreenState extends State<KakiSimpangScreen> {
             SizedBox(
               height: 10,
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => JenisKendaraanScreen(
-                        simpang: widget.simpang, arah: "Kanan"),
-                  ),
-                );
-              },
-              child: Container(
-                height: 85,
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: primaryColor,
-                ),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      "assets/barat-icon.png",
-                      height: 32,
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Text(
-                      "Kanan",
-                      style: whiteTextStyle.copyWith(
-                        fontSize: 18,
-                        fontWeight: semiBold,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -149,6 +111,44 @@ class _KakiSimpangScreenState extends State<KakiSimpangScreen> {
                     ),
                     Text(
                       "Lurus",
+                      style: whiteTextStyle.copyWith(
+                        fontSize: 18,
+                        fontWeight: semiBold,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => JenisKendaraanScreen(
+                        simpang: widget.simpang, arah: "Kanan"),
+                  ),
+                );
+              },
+              child: Container(
+                height: 85,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: primaryColor,
+                ),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      "assets/barat-icon.png",
+                      height: 32,
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      "Kanan",
                       style: whiteTextStyle.copyWith(
                         fontSize: 18,
                         fontWeight: semiBold,

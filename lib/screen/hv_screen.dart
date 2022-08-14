@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:perhitungan_persimpangan/api/sheets/sheets_api.dart';
 import 'package:perhitungan_persimpangan/data/key.dart';
 import 'package:perhitungan_persimpangan/models/lv_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../theme.dart';
 
@@ -36,6 +37,27 @@ class _HVScreenState extends State<HVScreen> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    getSimpang();
+    super.initState();
+  }
+
+  // LAUNCH URL
+  Future<void> _launchInBrowser() async {
+    const url =
+        'https://docs.google.com/spreadsheets/d/1lOvBU4DSzNAgZ4_oF8EvCNs_FrrUHfTZZLcEw8tsBHU/export?format=xlsx'; //LINK DOWNLOAD
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  Future getSimpang() async {
+    // print(await SheetsApi.getSimpangName(widget.simpang));
+    namaSimpang.text = await SheetsApi.getSimpangName(widget.simpang);
+  }
 
   // CONTAINER INFORMASI
   String? selectedTime;
@@ -52,11 +74,11 @@ class _HVScreenState extends State<HVScreen> {
       child: Column(
         children: [
           Text(
-            widget.simpang,
+            "KAKI SIMPANG ${widget.simpang}",
             style: whiteTextStyle.copyWith(fontSize: 14, fontWeight: bold),
           ),
           Text(
-            "(${widget.arah})",
+            "(${widget.arah.toUpperCase()})",
             style: whiteTextStyle.copyWith(fontWeight: semiBold),
           ),
           SizedBox(
@@ -156,6 +178,10 @@ class _HVScreenState extends State<HVScreen> {
           GestureDetector(
             onTap: () async {
               if (selectedTime != null && namaSimpang.text != '') {
+                // UPDATE NAMA SIMPANG
+                await SheetsApi.updateName(namaSimpang.text, widget.simpang);
+
+                // UPDATE NILAI TRAFFIC
                 var queryKey = KeySheet.waktu.where((prod) =>
                     prod["waktu"] == '${selectedTime!}_${widget.arah}');
                 var id = queryKey.single['key'];
@@ -169,9 +195,23 @@ class _HVScreenState extends State<HVScreen> {
                   LvModel.truckBesar: truckBesar,
                   LvModel.container20feet: container20Feet,
                 };
-                await SheetsApi.updateHv(id, data);
+                await SheetsApi.updateHv(id, widget.simpang, data);
+
+                // BERHASIL DISIMPAN
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Data Berhasil disimpan!"),
+                    backgroundColor: Colors.green,
+                  ),
+                );
               } else {
-                print("error validation");
+                // VALIDASI FORM NAMA SIMPANG DAN WAKTU
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Masukkan Nama Simpang dan Waktu!"),
+                    backgroundColor: Colors.red,
+                  ),
+                );
               }
             },
             child: Container(
@@ -481,7 +521,7 @@ class _HVScreenState extends State<HVScreen> {
         actions: [
           GestureDetector(
             onTap: () {
-              print("Launch SpreedSheet");
+              _launchInBrowser();
             },
             child: Padding(
               padding: const EdgeInsets.only(right: 15),

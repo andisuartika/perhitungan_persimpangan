@@ -23,7 +23,7 @@ class _JenisKendaraanScreenState extends State<JenisKendaraanScreen> {
         backgroundColor: primaryColor,
         centerTitle: true,
         title: Text(
-          widget.simpang + " " + widget.arah,
+          "KAKI SIMPANG ${widget.simpang} ${widget.arah.toUpperCase()}",
           style: whiteTextStyle.copyWith(
             fontSize: 16,
             fontWeight: semiBold,

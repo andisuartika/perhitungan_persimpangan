@@ -6,8 +6,8 @@ class SheetsApi {
 {
   "type": "service_account",
   "project_id": "gsheets-358606",
-  "private_key_id": "fcfc1491379becf2c1c7b66ea3d310b6da17cb6a",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQCngmnWvz9D1GXo\ncnbJlLq6qKOUbxmEXnIT5LYPKpnwn+/M6n6ZOl3+HJn908I/92GzSePjbhr6k72N\nsOaP++xNfA8xzGHmdx3iUkIt1mFFBmUpeoYWqLdiX9FhuzWyog8G2WGACc96OfP+\nFhONowwGbZGqdK9VIev/6mO9+xqydrsBQS0pWhJmUPylTv4TTepiiRDbrRclBO4m\nuwWohaCpp649gtEm7UzR1gotw6Wudw/xRXeyJ/l/pAAxQrAIduH5gtR4iUU8aeLR\nYuPMSQ+RJKJA2qz1hQMOTi1zgPsFAE4T/7ChdB11njo2EgGNgAIkETV9XrN5UvCC\n9Edo18VNAgMBAAECgf8QP8EEk94PNmCsVm4vdRNSsrPWMkYcu7dVNq/HyNol/V3F\nraRE4486lzZY6QcZgrsiKTNyBxGW5737gK2Hn2h3cRFdmKCROqeAzM9JTa0h2lJL\nM8IjcI+u0Jyps6oB1Lagc3XXIHHVPsnsW+KJsBylLaZzt9305CrV0xGEhwHlTcxK\nlXTsszo9uIRINUjl5RE5kkgpx4yxuTlIklVuJfB+wSLmooVmqTTSb4ENYCjkMN3R\nYlLW9kOIWdtndDrXDYkM5/SOSkCPmLLZciRZPh49Z1279A33ZLHnIwb648UHHey0\nrvvH8U7XOHPykRp/DWSuFkYpkPmpK+wUCMtpQ4MCgYEA2ArrOqJXSdW9Ue4tVy7x\nHTHWlhTQDyWweZ/nRPCBQmG9W8ThRX54Ka36j+0vZ3xicNa4KteqwG73lgSa6Syx\nJzGHvgrtN+h+8BGSjLOUGXeG6bRoa8u/2lRQijRlTlUa+NCc81K8VLT78L0gDW6O\ncKy2T6zcm1nu8xdE2DjTpEMCgYEAxn2RPgmwdrN49JC7mA127lGhOoGBftGPt3YJ\nhkiGkhCnraXxYg2rAqvYHZlxadUftVlB9lvXN2cdOt+Rx0NhpRlWFtIq6siXhVj0\ngnM9CS4B/0mVE5n8MbMicDdfiyzFLdsu9l7xSGi3UFSpRDjTx8Tfqou17/uDx001\nCmE9ny8CgYA5s7DgGDv4HH5UQ6kYgBEmGwmVTDnF0eswkOTUJOhhMnnA6PTB+uVd\nPHqPtmnS2gXw3WiTCMcyXnECQHifjrBCJ5h5ybFSHWbJ9+eMbOpBYwtFoEnDgMfd\nKGfageQM5+4sRouk8ZQbi7s+sUS+Uaj5ryeCYEkLtRl9E9nvZj4gwQKBgQCgL9I5\neORax3iEFxHuIl+q8WHmr4FscX9ElhQVtQ41bw+DinqFoXYzj6+4I49t07vlRQWA\n5pmHcsYaLzec0npJHWtmu3I7TGtMCIA7jvjhIaom9qFC0nC/Q0w1t9p5nUX8Pflm\nhzS+NRRL1idMkXgIro+7OUk5RYgSHfMCT3vFrQKBgCsgXdkR+wSBwxtV/oude2Cl\nXnolPRfAmAJBIYIy9AgRYnmgWfQ/UKN9Xa72VHERAcimyg7ThEUvTMc7pgbl+dzI\np7ja+VlEFz8iRYLc3rCPAQeWK1oNWYSTZAjhR8uUk3cG/HOGCk8Ri5OlrOdq/tbB\nbfxqGlF3xtWtUIZeTryg\n-----END PRIVATE KEY-----\n",
+  "private_key_id": "00c8525435da65a4ebc4fe287c9452e743f2afcf",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCoGq+z5s+9+YRw\nrwMD5MH8g8J7dJi+MQfZq5//Pu4tB5ZqWGfHTfAdIhVJGo3V4bPow4Bo6AHtoFlc\noUTD699z/+t50ZXZb39qrbbAQUZJ8RiVKzSsZUJhXuLXygp4pj+t07UpCWB3r+Yy\n57ZvhcykaHcdha9bARHOD7Cf7I7E+HukeNUWBcymGNRkJG7WJH7CV0l3w0bzN3cj\n3C3i0OcxaeiW6xgq3R2ERHcUJ/LKul0KYuwrNSrkufghuqTdNpSBNH7u/O8E2X5j\nQedDBcawGIoSo//CWJYUtyAXQodCi7OfkLrUiKSVaUeXzvbdwKYLZzcWpbiQh6x8\n7acZ+qNZAgMBAAECggEAGPYNd5si5xnxI9ejjPp0y41iXXk3YlZezLWCm8tjtmVV\nXRPPenVaMsPoK+Njgt9xcB3yJ/b7V6Y4XrFw8olIXth2G1qW86MYumXHqHiI0AXw\nGTDshgTAfJDdrMkgEOuEB8hTMsq6UPYE1TOO5V8Vafw7uQiBZ0lGCYukNbr8isaq\nW6gkWGr99pyf8E4zBgqbySqCZpN7CVAdPqBpTCYJArJAKdu3b5QTGxSRmlPvW0Ja\nW1iTmdclwESq7LbmAzNHEl++7E2rzVRT2/TV7e+5LZSqC8vRgIuXqxy2dFDr6nIL\nA/u1GJQ59C7PgCocWyAQACPlhnwv40UXqkLQp+0FWQKBgQDf9HIUMPNsWX+HOUuC\nKgU0BoKpZyifbJEkuPv37TQukauVoT/SfuqD5JQnqsOjE5SmOr+9f+/wClE+nAEi\naAKBIRsUr6sX8h9o014tmtdSFZHgPllys8mg1/LVEPKDTU9GAEIpBCyRQ6bVKXOt\nbo+qgup7YYThej9Da8Lq+KovzwKBgQDAKGkbD0kIGCCt3Tig8AVbpWjQXuDwUn83\nJOiqgFGuak65w38T6vTcrPkyc12RT4YYPeQQoh0PubUfjmkY0yMk/hgDUP/vgxsk\nerP9fZdWa/eZdE9kcnpT7Fh/0lRJ4Wbdz6zBKJfHH8qpvMLRDp3u4g5FZ5nb7JrL\n0nlZuSpcVwKBgHgi1R9nsu0ohXSwk4Tbrbbe1zCwmeYLg0DDysaQhDGHCxhVS7tL\nQdpGwAMXY6MTWeZiFYE+JCQMJNEFNsaSLOXAMJrEMW/C/n5pBFhKe78Yuwwj5i/V\nqg+SSD1rvewZiLDwao0+I/o45EHs3pTmfkLlv4s4IOQjg9RS9li90+2ZAoGAJ+G7\nPtSDUdzAG5XIhQ6L7iN8h5LJmNdmc+mDKLANQ+fogwGiRF4FiC+WYPQ0vU4GBM4D\nobgj0/m1L+F8ypw3tRvPnBCZrfpGDeIxrTD90gACmaTcPXrNDNIG5DChMdxIX00V\nC9oC9l8Qzv3QaVdhTA067Qi9lDmdPyRl70tREW0CgYB62e/RQrVyfqKKSP9TCVjz\nsTl7v9oSRjvwZHlrKvc7+O7EGRvJkvjo1ibWRJJ6uauh0Xl1lJ3Y5NDa+o+3m6S5\nZZCzvCfT/+rBjBudlN0eFDXPH5fMJLspmaRmCM3DCF1ld1avu/2iQvhBdx2kRJuF\nkmXV6/xOiRh7Jn7tgnsVQQ==\n-----END PRIVATE KEY-----\n",
   "client_email": "gsheets@gsheets-358606.iam.gserviceaccount.com",
   "client_id": "104905939908955793375",
   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
@@ -32,6 +32,12 @@ class SheetsApi {
     }
   }
 
+  static Future getSimpangName(String simpang) async {
+    final spreadsheet = await _gheets.spreadsheet(_spreadsheetId);
+    var sheet = spreadsheet.worksheetByTitle('KAKI-SIMPANG-$simpang');
+    return await sheet!.values.value(column: 5, row: 2);
+  }
+
   static Future<Worksheet> _getWorkSheet(
     Spreadsheet spreadsheet, {
     required String title,
@@ -43,28 +49,34 @@ class SheetsApi {
     }
   }
 
-  static Future insert(List<Map<String, dynamic>> rowList) async {
+  static Future updateName(String namaSimpang, simpang) async {
     // _dataInput!.values.map.appendRows(rowList);
-    // final spreadsheet = await _gheets.spreadsheet(_spreadsheetId);
-    // var sheet = spreadsheet.worksheetByTitle('DATA_INPUT_B');
-    // await sheet!.values.insertValue('SIMPANG HAHA', column: 4, row: 2);
+    final spreadsheet = await _gheets.spreadsheet(_spreadsheetId);
+    var sheet = spreadsheet.worksheetByTitle('KAKI-SIMPANG-$simpang');
+    await sheet!.values.insertValue(namaSimpang, column: 5, row: 2);
   }
 
   static Future<bool> updateLv(
     int id,
+    String simpang,
     Map<String, dynamic> data,
   ) async {
+    print('SIMPANG : $simpang');
+
     final spreadsheet = await _gheets.spreadsheet(_spreadsheetId);
-    var sheet = spreadsheet.worksheetByTitle('KAKI-SIMPANG-SELATAN');
+    var sheet = spreadsheet.worksheetByTitle('KAKI-SIMPANG-$simpang');
     return sheet!.values.map.insertRowByKey(id, data, fromColumn: 4);
   }
 
   static Future<bool> updateHv(
     int id,
+    String simpang,
     Map<String, dynamic> data,
   ) async {
+    print('SIMPANG : $simpang');
+
     final spreadsheet = await _gheets.spreadsheet(_spreadsheetId);
-    var sheet = spreadsheet.worksheetByTitle('KAKI-SIMPANG-SELATAN');
+    var sheet = spreadsheet.worksheetByTitle('KAKI-SIMPANG-$simpang');
     return sheet!.values.map.insertRowByKey(id, data, fromColumn: 11);
   }
 }
