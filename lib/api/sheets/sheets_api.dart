@@ -56,7 +56,7 @@ class SheetsApi {
     await sheet!.values.insertValue(namaSimpang, column: 5, row: 2);
   }
 
-  static Future<bool> updateLv(
+  static Future<bool> updateMc(
     int id,
     String simpang,
     Map<String, dynamic> data,
@@ -66,6 +66,18 @@ class SheetsApi {
     final spreadsheet = await _gheets.spreadsheet(_spreadsheetId);
     var sheet = spreadsheet.worksheetByTitle('KAKI-SIMPANG-$simpang');
     return sheet!.values.map.insertRowByKey(id, data, fromColumn: 4);
+  }
+
+  static Future<bool> updateLv(
+    int id,
+    String simpang,
+    Map<String, dynamic> data,
+  ) async {
+    print('SIMPANG : $simpang');
+
+    final spreadsheet = await _gheets.spreadsheet(_spreadsheetId);
+    var sheet = spreadsheet.worksheetByTitle('KAKI-SIMPANG-$simpang');
+    return sheet!.values.map.insertRowByKey(id, data, fromColumn: 5);
   }
 
   static Future<bool> updateHv(
@@ -78,5 +90,17 @@ class SheetsApi {
     final spreadsheet = await _gheets.spreadsheet(_spreadsheetId);
     var sheet = spreadsheet.worksheetByTitle('KAKI-SIMPANG-$simpang');
     return sheet!.values.map.insertRowByKey(id, data, fromColumn: 11);
+  }
+
+  static Future<bool> updateUm(
+    int id,
+    String simpang,
+    Map<String, dynamic> data,
+  ) async {
+    print('SIMPANG : $simpang');
+
+    final spreadsheet = await _gheets.spreadsheet(_spreadsheetId);
+    var sheet = spreadsheet.worksheetByTitle('KAKI-SIMPANG-$simpang');
+    return sheet!.values.map.insertRowByKey(id, data, fromColumn: 15);
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:perhitungan_persimpangan/screen/hv_screen.dart';
 import 'package:perhitungan_persimpangan/screen/lv_screen.dart';
+import 'package:perhitungan_persimpangan/screen/mc_screen.dart';
+import 'package:perhitungan_persimpangan/screen/um_screen.dart';
 import 'package:perhitungan_persimpangan/theme.dart';
 
 class JenisKendaraanScreen extends StatefulWidget {
@@ -49,6 +51,44 @@ class _JenisKendaraanScreenState extends State<JenisKendaraanScreen> {
             SizedBox(
               height: 10,
             ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        MCScreen(simpang: widget.simpang, arah: widget.arah),
+                  ),
+                );
+              },
+              child: Container(
+                height: 85,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: primaryColor,
+                ),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      "assets/motor-icon.png",
+                      height: 32,
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      "Motorcycle (MC)",
+                      style: whiteTextStyle.copyWith(
+                        fontSize: 18,
+                        fontWeight: semiBold,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -115,6 +155,44 @@ class _JenisKendaraanScreenState extends State<JenisKendaraanScreen> {
                     ),
                     Text(
                       "High Vehicle (HV)",
+                      style: whiteTextStyle.copyWith(
+                        fontSize: 18,
+                        fontWeight: semiBold,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        UMScreen(simpang: widget.simpang, arah: widget.arah),
+                  ),
+                );
+              },
+              child: Container(
+                height: 85,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: primaryColor,
+                ),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      "assets/sepeda-icon.png",
+                      height: 32,
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      "Unmotorized (UM)",
                       style: whiteTextStyle.copyWith(
                         fontSize: 18,
                         fontWeight: semiBold,

@@ -7,33 +7,29 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../theme.dart';
 
-class HVScreen extends StatefulWidget {
+class UMScreen extends StatefulWidget {
   final String simpang;
   final String arah;
-  const HVScreen({Key? key, required this.simpang, required this.arah})
+  const UMScreen({Key? key, required this.simpang, required this.arah})
       : super(key: key);
 
   @override
-  State<HVScreen> createState() => _HVScreenState();
+  State<UMScreen> createState() => _UMScreenState();
 }
 
-class _HVScreenState extends State<HVScreen> {
+class _UMScreenState extends State<UMScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController namaSimpang = TextEditingController(text: '');
+  String namaSimpangSheet = '';
   int totalTraffic = 0;
-  int bus = 0;
-  int truckSedang = 0;
-  int truckBesar = 0;
-  int container20Feet = 0;
+  int sepeda = 0;
   bool isLoading = true;
 
+  // RESET DATA
   void reset() {
     setState(() {
       totalTraffic = 0;
-      bus = 0;
-      truckSedang = 0;
-      truckBesar = 0;
-      container20Feet = 0;
+      sepeda = 0;
     });
   }
 
@@ -218,12 +214,9 @@ class _HVScreenState extends State<HVScreen> {
                         LvModel.id: 1,
                         LvModel.namaSimpang: namaSimpang.text,
                         LvModel.waktu: selectedTime,
-                        LvModel.busSedang: bus,
-                        LvModel.truckSedang: truckSedang,
-                        LvModel.truckBesar: truckBesar,
-                        LvModel.container20feet: container20Feet,
+                        LvModel.sepeda: sepeda,
                       };
-                      await SheetsApi.updateHv(id, widget.simpang, data);
+                      await SheetsApi.updateUm(id, widget.simpang, data);
 
                       // BERHASIL DISIMPAN
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -289,11 +282,11 @@ class _HVScreenState extends State<HVScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset(
-                  "assets/busSedang-icon.png",
+                  "assets/sepeda-icon.png",
                   width: 40,
                 ),
                 Text(
-                  'Bus Sedang',
+                  'Sepeda',
                   style: whiteTextStyle.copyWith(
                     fontWeight: semiBold,
                   ),
@@ -305,8 +298,8 @@ class _HVScreenState extends State<HVScreen> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          bus == 0 ? totalTraffic : totalTraffic--;
-                          bus == 0 ? bus : bus--;
+                          sepeda == 0 ? totalTraffic : totalTraffic--;
+                          sepeda == 0 ? sepeda : sepeda--;
                         });
                       },
                       child: Image.asset(
@@ -315,7 +308,7 @@ class _HVScreenState extends State<HVScreen> {
                       ),
                     ),
                     Text(
-                      bus.toString(),
+                      sepeda.toString(),
                       style: whiteTextStyle.copyWith(
                         fontSize: 16,
                         fontWeight: semiBold,
@@ -324,195 +317,7 @@ class _HVScreenState extends State<HVScreen> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          bus++;
-                          totalTraffic++;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/plus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(5),
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            height: 100,
-            width: MediaQuery.of(context).size.width * 0.25,
-            decoration: BoxDecoration(
-              color: secondaryColor,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/truck-icon.png",
-                  width: 40,
-                ),
-                Text(
-                  'Truck Sedang',
-                  style: whiteTextStyle.copyWith(
-                    fontWeight: semiBold,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          truckSedang == 0 ? totalTraffic : totalTraffic--;
-                          truckSedang == 0 ? truckSedang : truckSedang--;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/minus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                    Text(
-                      truckSedang.toString(),
-                      style: whiteTextStyle.copyWith(
-                        fontSize: 16,
-                        fontWeight: semiBold,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          truckSedang++;
-                          totalTraffic++;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/plus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(5),
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            height: 100,
-            width: MediaQuery.of(context).size.width * 0.25,
-            decoration: BoxDecoration(
-              color: secondaryColor,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/truckBesar-icon.png",
-                  width: 40,
-                ),
-                Text(
-                  'Truck Besar',
-                  style: whiteTextStyle.copyWith(
-                    fontWeight: semiBold,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          truckBesar == 0 ? totalTraffic : totalTraffic--;
-                          truckBesar == 0 ? truckBesar : truckBesar--;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/minus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                    Text(
-                      truckBesar.toString(),
-                      style: whiteTextStyle.copyWith(
-                        fontSize: 16,
-                        fontWeight: semiBold,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          truckBesar++;
-                          totalTraffic++;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/plus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(5),
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            height: 100,
-            width: MediaQuery.of(context).size.width * 0.25,
-            decoration: BoxDecoration(
-              color: secondaryColor,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/hv-icon.png",
-                  width: 40,
-                ),
-                Text(
-                  'Container 20feet',
-                  style: whiteTextStyle.copyWith(
-                    fontWeight: semiBold,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          container20Feet == 0 ? totalTraffic : totalTraffic--;
-                          container20Feet == 0
-                              ? container20Feet
-                              : container20Feet--;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/minus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                    Text(
-                      container20Feet.toString(),
-                      style: whiteTextStyle.copyWith(
-                        fontSize: 16,
-                        fontWeight: semiBold,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          container20Feet++;
+                          sepeda++;
                           totalTraffic++;
                         });
                       },
@@ -531,6 +336,7 @@ class _HVScreenState extends State<HVScreen> {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgorundColor,
@@ -538,7 +344,7 @@ class _HVScreenState extends State<HVScreen> {
         backgroundColor: primaryColor,
         centerTitle: true,
         title: Text(
-          "High Vehicle (LV)",
+          "Unmotorized (UM)",
           style: whiteTextStyle.copyWith(
             fontSize: 16,
             fontWeight: semiBold,
@@ -554,6 +360,7 @@ class _HVScreenState extends State<HVScreen> {
           GestureDetector(
             onTap: () {
               _launchInBrowser();
+              print("Launch SpreedSheet");
             },
             child: Padding(
               padding: const EdgeInsets.only(right: 15),

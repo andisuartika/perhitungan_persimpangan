@@ -7,33 +7,29 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../theme.dart';
 
-class HVScreen extends StatefulWidget {
+class MCScreen extends StatefulWidget {
   final String simpang;
   final String arah;
-  const HVScreen({Key? key, required this.simpang, required this.arah})
+  const MCScreen({Key? key, required this.simpang, required this.arah})
       : super(key: key);
 
   @override
-  State<HVScreen> createState() => _HVScreenState();
+  State<MCScreen> createState() => _MCScreenState();
 }
 
-class _HVScreenState extends State<HVScreen> {
+class _MCScreenState extends State<MCScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController namaSimpang = TextEditingController(text: '');
+  String namaSimpangSheet = '';
   int totalTraffic = 0;
-  int bus = 0;
-  int truckSedang = 0;
-  int truckBesar = 0;
-  int container20Feet = 0;
+  int motor = 0;
   bool isLoading = true;
 
+  // RESET DATA
   void reset() {
     setState(() {
       totalTraffic = 0;
-      bus = 0;
-      truckSedang = 0;
-      truckBesar = 0;
-      container20Feet = 0;
+      motor = 0;
     });
   }
 
@@ -199,12 +195,12 @@ class _HVScreenState extends State<HVScreen> {
                 )
               : GestureDetector(
                   onTap: () async {
-                    // SET LOADING
-                    setState(() {
-                      isLoading = true;
-                    });
-
                     if (selectedTime != null && namaSimpang.text != '') {
+                      // SET LOADING
+                      setState(() {
+                        isLoading = true;
+                      });
+
                       // UPDATE NAMA SIMPANG
                       await SheetsApi.updateName(
                           namaSimpang.text, widget.simpang);
@@ -218,12 +214,9 @@ class _HVScreenState extends State<HVScreen> {
                         LvModel.id: 1,
                         LvModel.namaSimpang: namaSimpang.text,
                         LvModel.waktu: selectedTime,
-                        LvModel.busSedang: bus,
-                        LvModel.truckSedang: truckSedang,
-                        LvModel.truckBesar: truckBesar,
-                        LvModel.container20feet: container20Feet,
+                        LvModel.motor: motor,
                       };
-                      await SheetsApi.updateHv(id, widget.simpang, data);
+                      await SheetsApi.updateMc(id, widget.simpang, data);
 
                       // BERHASIL DISIMPAN
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -289,11 +282,11 @@ class _HVScreenState extends State<HVScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset(
-                  "assets/busSedang-icon.png",
+                  "assets/motor-icon.png",
                   width: 40,
                 ),
                 Text(
-                  'Bus Sedang',
+                  'Sepeda Motor',
                   style: whiteTextStyle.copyWith(
                     fontWeight: semiBold,
                   ),
@@ -305,8 +298,8 @@ class _HVScreenState extends State<HVScreen> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          bus == 0 ? totalTraffic : totalTraffic--;
-                          bus == 0 ? bus : bus--;
+                          motor == 0 ? totalTraffic : totalTraffic--;
+                          motor == 0 ? motor : motor--;
                         });
                       },
                       child: Image.asset(
@@ -315,7 +308,7 @@ class _HVScreenState extends State<HVScreen> {
                       ),
                     ),
                     Text(
-                      bus.toString(),
+                      motor.toString(),
                       style: whiteTextStyle.copyWith(
                         fontSize: 16,
                         fontWeight: semiBold,
@@ -324,195 +317,7 @@ class _HVScreenState extends State<HVScreen> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          bus++;
-                          totalTraffic++;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/plus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(5),
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            height: 100,
-            width: MediaQuery.of(context).size.width * 0.25,
-            decoration: BoxDecoration(
-              color: secondaryColor,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/truck-icon.png",
-                  width: 40,
-                ),
-                Text(
-                  'Truck Sedang',
-                  style: whiteTextStyle.copyWith(
-                    fontWeight: semiBold,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          truckSedang == 0 ? totalTraffic : totalTraffic--;
-                          truckSedang == 0 ? truckSedang : truckSedang--;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/minus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                    Text(
-                      truckSedang.toString(),
-                      style: whiteTextStyle.copyWith(
-                        fontSize: 16,
-                        fontWeight: semiBold,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          truckSedang++;
-                          totalTraffic++;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/plus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(5),
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            height: 100,
-            width: MediaQuery.of(context).size.width * 0.25,
-            decoration: BoxDecoration(
-              color: secondaryColor,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/truckBesar-icon.png",
-                  width: 40,
-                ),
-                Text(
-                  'Truck Besar',
-                  style: whiteTextStyle.copyWith(
-                    fontWeight: semiBold,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          truckBesar == 0 ? totalTraffic : totalTraffic--;
-                          truckBesar == 0 ? truckBesar : truckBesar--;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/minus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                    Text(
-                      truckBesar.toString(),
-                      style: whiteTextStyle.copyWith(
-                        fontSize: 16,
-                        fontWeight: semiBold,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          truckBesar++;
-                          totalTraffic++;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/plus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(5),
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            height: 100,
-            width: MediaQuery.of(context).size.width * 0.25,
-            decoration: BoxDecoration(
-              color: secondaryColor,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/hv-icon.png",
-                  width: 40,
-                ),
-                Text(
-                  'Container 20feet',
-                  style: whiteTextStyle.copyWith(
-                    fontWeight: semiBold,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          container20Feet == 0 ? totalTraffic : totalTraffic--;
-                          container20Feet == 0
-                              ? container20Feet
-                              : container20Feet--;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/minus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                    Text(
-                      container20Feet.toString(),
-                      style: whiteTextStyle.copyWith(
-                        fontSize: 16,
-                        fontWeight: semiBold,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          container20Feet++;
+                          motor++;
                           totalTraffic++;
                         });
                       },
@@ -538,7 +343,7 @@ class _HVScreenState extends State<HVScreen> {
         backgroundColor: primaryColor,
         centerTitle: true,
         title: Text(
-          "High Vehicle (LV)",
+          "Motorcycle (MC)",
           style: whiteTextStyle.copyWith(
             fontSize: 16,
             fontWeight: semiBold,
@@ -554,6 +359,7 @@ class _HVScreenState extends State<HVScreen> {
           GestureDetector(
             onTap: () {
               _launchInBrowser();
+              print("Launch SpreedSheet");
             },
             child: Padding(
               padding: const EdgeInsets.only(right: 15),

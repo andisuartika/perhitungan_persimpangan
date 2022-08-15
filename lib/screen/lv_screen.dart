@@ -21,26 +21,23 @@ class _LvScreenState extends State<LvScreen> {
   TextEditingController namaSimpang = TextEditingController(text: '');
   String namaSimpangSheet = '';
   int totalTraffic = 0;
-  int motor = 0;
   int mobil = 0;
   int doubleCabin = 0;
   int mpu = 0;
   int miniBus = 0;
   int pickUp = 0;
   int miniTruck = 0;
-  int sepeda = 0;
+  bool isLoading = true;
 
   void reset() {
     setState(() {
       totalTraffic = 0;
-      motor = 0;
       mobil = 0;
       doubleCabin = 0;
       mpu = 0;
       miniBus = 0;
       pickUp = 0;
       miniTruck = 0;
-      sepeda = 0;
     });
   }
 
@@ -65,6 +62,9 @@ class _LvScreenState extends State<LvScreen> {
   Future getSimpang() async {
     // print(await SheetsApi.getSimpangName(widget.simpang));
     namaSimpang.text = await SheetsApi.getSimpangName(widget.simpang);
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -185,67 +185,93 @@ class _LvScreenState extends State<LvScreen> {
             ),
           ),
           SizedBox(height: 15),
-          GestureDetector(
-            onTap: () async {
-              if (selectedTime != null && namaSimpang.text != '') {
-                // UPDATE NAMA SIMPANG
-                await SheetsApi.updateName(namaSimpang.text, widget.simpang);
+          isLoading
+              ? Container(
+                  height: 35,
+                  width: 150,
+                  decoration: BoxDecoration(
+                    color: backgorundColor,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Loading...",
+                      style: primaryTextStyle.copyWith(
+                        fontSize: 14,
+                        fontWeight: bold,
+                      ),
+                    ),
+                  ),
+                )
+              : GestureDetector(
+                  onTap: () async {
+                    // SET LOADING
+                    setState(() {
+                      isLoading = true;
+                    });
 
-                // UPDATE NILAI TRAFFIC
-                var queryKey = KeySheet.waktu.where((prod) =>
-                    prod["waktu"] == '${selectedTime!}_${widget.arah}');
-                var id = queryKey.single['key'];
-                print(id);
-                final data = {
-                  LvModel.id: 1,
-                  LvModel.namaSimpang: namaSimpang.text,
-                  LvModel.waktu: selectedTime,
-                  LvModel.motor: motor,
-                  LvModel.mobil: mobil,
-                  LvModel.mpu: mpu,
-                  LvModel.pickup: pickUp,
-                  LvModel.truckKecil: miniTruck,
-                  LvModel.busKecil: miniBus,
-                  LvModel.doubleKabin: doubleCabin,
-                  LvModel.sepeda: sepeda,
-                };
-                await SheetsApi.updateLv(id, widget.simpang, data);
+                    if (selectedTime != null && namaSimpang.text != '') {
+                      // UPDATE NAMA SIMPANG
+                      await SheetsApi.updateName(
+                          namaSimpang.text, widget.simpang);
 
-                // BERHASIL DISIMPAN
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text("Data Berhasil disimpan!"),
-                    backgroundColor: Colors.green,
+                      // UPDATE NILAI TRAFFIC
+                      var queryKey = KeySheet.waktu.where((prod) =>
+                          prod["waktu"] == '${selectedTime!}_${widget.arah}');
+                      var id = queryKey.single['key'];
+                      print(id);
+                      final data = {
+                        LvModel.id: 1,
+                        LvModel.namaSimpang: namaSimpang.text,
+                        LvModel.waktu: selectedTime,
+                        LvModel.mobil: mobil,
+                        LvModel.mpu: mpu,
+                        LvModel.pickup: pickUp,
+                        LvModel.truckKecil: miniTruck,
+                        LvModel.busKecil: miniBus,
+                        LvModel.doubleKabin: doubleCabin,
+                      };
+                      await SheetsApi.updateLv(id, widget.simpang, data);
+
+                      // BERHASIL DISIMPAN
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Data Berhasil disimpan!"),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    } else {
+                      // VALIDASI FORM NAMA SIMPANG DAN WAKTU
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Masukkan Nama Simpang dan Waktu!"),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                    // SET LOADING
+                    setState(() {
+                      isLoading = false;
+                    });
+                  },
+                  child: Container(
+                    height: 35,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      color: whiteColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Simpan",
+                        style: primaryTextStyle.copyWith(
+                          fontSize: 14,
+                          fontWeight: bold,
+                        ),
+                      ),
+                    ),
                   ),
-                );
-              } else {
-                // VALIDASI FORM NAMA SIMPANG DAN WAKTU
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text("Masukkan Nama Simpang dan Waktu!"),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            },
-            child: Container(
-              height: 35,
-              width: 150,
-              decoration: BoxDecoration(
-                color: whiteColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(
-                child: Text(
-                  "Simpan",
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: bold,
-                  ),
-                ),
-              ),
-            ),
-          )
+                )
         ],
       ),
     );
@@ -258,68 +284,6 @@ class _LvScreenState extends State<LvScreen> {
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         children: [
-          Container(
-            margin: EdgeInsets.all(5),
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            height: 100,
-            width: MediaQuery.of(context).size.width * 0.25,
-            decoration: BoxDecoration(
-              color: secondaryColor,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/motor-icon.png",
-                  width: 40,
-                ),
-                Text(
-                  'Sepeda Motor',
-                  style: whiteTextStyle.copyWith(
-                    fontWeight: semiBold,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          motor == 0 ? totalTraffic : totalTraffic--;
-                          motor == 0 ? motor : motor--;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/minus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                    Text(
-                      motor.toString(),
-                      style: whiteTextStyle.copyWith(
-                        fontSize: 16,
-                        fontWeight: semiBold,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          motor++;
-                          totalTraffic++;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/plus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
           Container(
             margin: EdgeInsets.all(5),
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
@@ -679,68 +643,6 @@ class _LvScreenState extends State<LvScreen> {
                       onTap: () {
                         setState(() {
                           miniTruck++;
-                          totalTraffic++;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/plus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(5),
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            height: 100,
-            width: MediaQuery.of(context).size.width * 0.25,
-            decoration: BoxDecoration(
-              color: secondaryColor,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/sepeda-icon.png",
-                  width: 40,
-                ),
-                Text(
-                  'Sepeda',
-                  style: whiteTextStyle.copyWith(
-                    fontWeight: semiBold,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          sepeda == 0 ? totalTraffic : totalTraffic--;
-                          sepeda == 0 ? sepeda : sepeda--;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/minus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                    Text(
-                      sepeda.toString(),
-                      style: whiteTextStyle.copyWith(
-                        fontSize: 16,
-                        fontWeight: semiBold,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          sepeda++;
                           totalTraffic++;
                         });
                       },
