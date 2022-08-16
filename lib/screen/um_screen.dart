@@ -23,7 +23,7 @@ class _UMScreenState extends State<UMScreen> {
   String namaSimpangSheet = '';
   int totalTraffic = 0;
   int sepeda = 0;
-  bool isLoading = true;
+  bool isLoading = false;
 
   // RESET DATA
   void reset() {
@@ -52,7 +52,9 @@ class _UMScreenState extends State<UMScreen> {
   }
 
   Future getSimpang() async {
-    // print(await SheetsApi.getSimpangName(widget.simpang));
+    setState(() {
+      isLoading = false;
+    });
     namaSimpang.text = await SheetsApi.getSimpangName(widget.simpang);
     setState(() {
       isLoading = false;

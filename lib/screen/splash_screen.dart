@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 5), () => Navigator.pushNamed(context, '/home'));
+    Timer(Duration(seconds: 5), () => Navigator.pushNamed(context, '/sign-up'));
     return Scaffold(
       backgroundColor: primaryColor,
       body: Center(

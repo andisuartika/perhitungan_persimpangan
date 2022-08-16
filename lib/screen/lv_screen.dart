@@ -27,7 +27,7 @@ class _LvScreenState extends State<LvScreen> {
   int miniBus = 0;
   int pickUp = 0;
   int miniTruck = 0;
-  bool isLoading = true;
+  bool isLoading = false;
 
   void reset() {
     setState(() {
@@ -61,6 +61,9 @@ class _LvScreenState extends State<LvScreen> {
 
   Future getSimpang() async {
     // print(await SheetsApi.getSimpangName(widget.simpang));
+    setState(() {
+      isLoading = true;
+    });
     namaSimpang.text = await SheetsApi.getSimpangName(widget.simpang);
     setState(() {
       isLoading = false;

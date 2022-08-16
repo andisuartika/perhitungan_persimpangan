@@ -23,7 +23,7 @@ class _MCScreenState extends State<MCScreen> {
   String namaSimpangSheet = '';
   int totalTraffic = 0;
   int motor = 0;
-  bool isLoading = true;
+  bool isLoading = false;
 
   // RESET DATA
   void reset() {
@@ -52,7 +52,9 @@ class _MCScreenState extends State<MCScreen> {
   }
 
   Future getSimpang() async {
-    // print(await SheetsApi.getSimpangName(widget.simpang));
+    setState(() {
+      isLoading = true;
+    });
     namaSimpang.text = await SheetsApi.getSimpangName(widget.simpang);
     setState(() {
       isLoading = false;

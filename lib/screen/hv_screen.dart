@@ -25,7 +25,7 @@ class _HVScreenState extends State<HVScreen> {
   int truckSedang = 0;
   int truckBesar = 0;
   int container20Feet = 0;
-  bool isLoading = true;
+  bool isLoading = false;
 
   void reset() {
     setState(() {
@@ -56,7 +56,9 @@ class _HVScreenState extends State<HVScreen> {
   }
 
   Future getSimpang() async {
-    // print(await SheetsApi.getSimpangName(widget.simpang));
+    setState(() {
+      isLoading = true;
+    });
     namaSimpang.text = await SheetsApi.getSimpangName(widget.simpang);
     setState(() {
       isLoading = false;

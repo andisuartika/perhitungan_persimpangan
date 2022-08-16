@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:perhitungan_persimpangan/screen/access_code_screen.dart';
 import 'package:perhitungan_persimpangan/screen/home_screen.dart';
 import 'package:perhitungan_persimpangan/screen/hv_screen.dart';
+import 'package:perhitungan_persimpangan/screen/login_screen.dart';
 import 'package:perhitungan_persimpangan/screen/lv_screen.dart';
+import 'package:perhitungan_persimpangan/screen/signUp_screen.dart';
 import 'package:perhitungan_persimpangan/screen/splash_screen.dart';
 
 import 'api/sheets/sheets_api.dart';
@@ -25,6 +28,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => SplashScreen(),
         '/home': (context) => HomeScreen(),
+        '/login': (context) => LoginScreen(),
+        '/access-code': (context) => AccessCodeScreen(),
+        '/sign-up': (context) => SignUpScreen(),
       },
     );
   }
