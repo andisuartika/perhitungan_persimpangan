@@ -9,7 +9,7 @@
     </queries>
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="perhitungan_persimpangan"
+        android:label="Traffic Count Analyzer"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -8,36 +8,51 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../theme.dart';
 
-class UMScreen extends StatefulWidget {
+class InputScreen extends StatefulWidget {
+  final String namaSimpang;
   final String simpang;
   final String arah;
-  const UMScreen({Key? key, required this.simpang, required this.arah})
+  final List<String> vihecle;
+  const InputScreen(
+      {Key? key,
+      required this.simpang,
+      required this.arah,
+      required this.namaSimpang,
+      required this.vihecle})
       : super(key: key);
 
   @override
-  State<UMScreen> createState() => _UMScreenState();
+  State<InputScreen> createState() => _InputScreenState();
 }
 
-class _UMScreenState extends State<UMScreen> {
-  final _formKey = GlobalKey<FormState>();
-  TextEditingController namaSimpang = TextEditingController(text: '');
+class _InputScreenState extends State<InputScreen> {
   String textArah = '';
-  int totalTraffic = 0;
-  int sepeda = 0;
-  bool isLoading = false;
+  int lv = 0;
+  int hv = 0;
+  int mc = 0;
+  int um = 0;
+  bool isLoading = false, isVihecle2 = false;
 
   // RESET DATA
   void reset() {
     setState(() {
-      totalTraffic = 0;
-      sepeda = 0;
+      lv = 0;
+      hv = 0;
+      mc = 0;
+      um = 0;
     });
   }
 
   @override
   void initState() {
     // TODO: implement initState
-    getSimpang();
+    if (widget.vihecle.length == 2) {
+      setState(() {
+        isVihecle2 = true;
+        print('TRUE');
+      });
+    }
+
     // CONVERT TEXT ARAH
     if (widget.arah == 'Kiri') {
       textArah = 'Belok Kiri';
@@ -52,6 +67,7 @@ class _UMScreenState extends State<UMScreen> {
   // LAUNCH URL
   Future<void> _launchInBrowser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return bool
     var sheetId = prefs.getString('sheetId')!;
     var link =
         'https://docs.google.com/spreadsheets/d/${sheetId.toString()}/export?format=xlsx'; //LINK DOWNLOAD
@@ -62,23 +78,13 @@ class _UMScreenState extends State<UMScreen> {
     }
   }
 
-  Future getSimpang() async {
-    setState(() {
-      isLoading = false;
-    });
-    namaSimpang.text = await SheetsApi.getSimpangName(widget.simpang);
-    setState(() {
-      isLoading = false;
-    });
-  }
-
   // CONTAINER INFORMASI
   String? selectedTime;
   Widget containerHeader() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 20),
       padding: EdgeInsets.all(10),
-      height: 250,
+      height: 175,
       width: double.infinity,
       decoration: BoxDecoration(
         color: primaryColor,
@@ -87,7 +93,7 @@ class _UMScreenState extends State<UMScreen> {
       child: Column(
         children: [
           Text(
-            "KAKI SIMPANG ${widget.simpang}",
+            "${widget.namaSimpang.toUpperCase()} KAKI SIMPANG ${widget.simpang}",
             style: whiteTextStyle.copyWith(fontSize: 14, fontWeight: bold),
           ),
           Text(
@@ -96,34 +102,6 @@ class _UMScreenState extends State<UMScreen> {
           ),
           SizedBox(
             height: 5,
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "Nama Simpang : ",
-                style:
-                    whiteTextStyle.copyWith(fontSize: 12, fontWeight: medium),
-              ),
-              Expanded(
-                child: Container(
-                  child: TextFormField(
-                    keyboardType: TextInputType.text,
-                    style: whiteTextStyle.copyWith(fontSize: 12),
-                    controller: namaSimpang,
-                    decoration: InputDecoration(
-                      focusedBorder:
-                          UnderlineInputBorder(borderSide: BorderSide.none),
-                      enabledBorder:
-                          UnderlineInputBorder(borderSide: BorderSide.none),
-                      focusColor: primaryColor,
-                      hintText: "Masukkan simpang...",
-                      hintStyle: whiteTextStyle.copyWith(fontSize: 12),
-                    ),
-                  ),
-                ),
-              ),
-            ],
           ),
           Row(
             children: [
@@ -177,23 +155,24 @@ class _UMScreenState extends State<UMScreen> {
               ),
             ],
           ),
-          SizedBox(height: 10),
-          Center(
-            child: Text(
-              "Total Traffic : $totalTraffic",
-              style: whiteTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: bold,
-              ),
-            ),
-          ),
+          // SizedBox(height: 10),
+          // Center(
+          //   child: Text(
+          //     "Total Traffic : $totalTraffic",
+          //     style: whiteTextStyle.copyWith(
+          //       fontSize: 16,
+          //       fontWeight: bold,
+          //     ),
+          //   ),
+          // ),
           SizedBox(height: 15),
           isLoading
               ? Container(
-                  height: 35,
-                  width: 150,
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  height: 40,
+                  width: double.infinity,
                   decoration: BoxDecoration(
-                    color: backgorundColor,
+                    color: whiteColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
@@ -208,15 +187,15 @@ class _UMScreenState extends State<UMScreen> {
                 )
               : GestureDetector(
                   onTap: () async {
-                    // SET LOADING
-                    setState(() {
-                      isLoading = true;
-                    });
+                    if (selectedTime != null && widget.namaSimpang != '') {
+                      // SET LOADING
+                      setState(() {
+                        isLoading = true;
+                      });
 
-                    if (selectedTime != null && namaSimpang.text != '') {
                       // UPDATE NAMA SIMPANG
                       await SheetsApi.updateName(
-                          namaSimpang.text, widget.simpang);
+                          widget.namaSimpang, widget.simpang);
 
                       // UPDATE NILAI TRAFFIC
                       var queryKey = KeySheet.waktu.where((prod) =>
@@ -225,11 +204,17 @@ class _UMScreenState extends State<UMScreen> {
                       print(id);
                       final data = {
                         LvModel.id: 1,
-                        LvModel.namaSimpang: namaSimpang.text,
+                        LvModel.namaSimpang: widget.namaSimpang,
                         LvModel.waktu: selectedTime,
-                        
+                        LvModel.mc: mc,
+                        LvModel.lv: lv,
+                        LvModel.hv: hv,
+                        LvModel.um: um,
                       };
-                      await SheetsApi.updateUm(id, widget.simpang, data);
+                      await SheetsApi.updateMc(id, widget.simpang, data);
+
+                      // RESET
+                      reset();
 
                       // BERHASIL DISIMPAN
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -242,7 +227,7 @@ class _UMScreenState extends State<UMScreen> {
                       // VALIDASI FORM NAMA SIMPANG DAN WAKTU
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text("Masukkan Nama Simpang dan Waktu!"),
+                          content: Text("Masukkan Waktu!"),
                           backgroundColor: Colors.red,
                         ),
                       );
@@ -253,8 +238,9 @@ class _UMScreenState extends State<UMScreen> {
                     });
                   },
                   child: Container(
-                    height: 35,
-                    width: 150,
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    height: 40,
+                    width: double.infinity,
                     decoration: BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadius.circular(8),
@@ -275,81 +261,206 @@ class _UMScreenState extends State<UMScreen> {
     );
   }
 
-  Widget vihicle() {
-    return Container(
-      child: GridView.count(
-        crossAxisCount: 2,
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        children: [
-          Container(
-            margin: EdgeInsets.all(5),
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            height: 100,
-            width: MediaQuery.of(context).size.width * 0.25,
-            decoration: BoxDecoration(
-              color: secondaryColor,
-              borderRadius: BorderRadius.circular(8),
+  Widget Mc() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          mc++;
+        });
+      },
+      child: Container(
+        width: double.infinity,
+        height: 200,
+        padding: EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: secondaryColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              "assets/motor-icon.png",
+              width: 100,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/sepeda-icon.png",
-                  width: 40,
-                ),
-                Text(
-                  'Sepeda',
-                  style: whiteTextStyle.copyWith(
-                    fontWeight: semiBold,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          sepeda == 0 ? totalTraffic : totalTraffic--;
-                          sepeda == 0 ? sepeda : sepeda--;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/minus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                    Text(
-                      sepeda.toString(),
-                      style: whiteTextStyle.copyWith(
-                        fontSize: 16,
-                        fontWeight: semiBold,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          sepeda++;
-                          totalTraffic++;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/plus-icon.png',
-                        width: 40,
-                      ),
-                    ),
-                  ],
-                )
-              ],
+            Text(
+              'Sepeda Motor (MC)',
+              style: whiteTextStyle.copyWith(
+                fontWeight: semiBold,
+              ),
             ),
-          ),
-        ],
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              '${mc}',
+              style: whiteTextStyle.copyWith(
+                fontSize: 32,
+                fontWeight: semiBold,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 
-  @override
+  Widget Lv() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          lv++;
+        });
+      },
+      child: Container(
+        width: double.infinity,
+        height: 200,
+        padding: EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: secondaryColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              "assets/lv-icon.png",
+              width: 100,
+            ),
+            Text(
+              'Light Vehicle (LV)',
+              style: whiteTextStyle.copyWith(
+                fontWeight: semiBold,
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              '${lv}',
+              style: whiteTextStyle.copyWith(
+                fontSize: 32,
+                fontWeight: semiBold,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget Hv() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          hv++;
+        });
+      },
+      child: Container(
+        width: double.infinity,
+        height: 200,
+        padding: EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: secondaryColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              "assets/hv-icon.png",
+              width: 100,
+            ),
+            Text(
+              'Light Vehicle (LV)',
+              style: whiteTextStyle.copyWith(
+                fontWeight: semiBold,
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              '${hv}',
+              style: whiteTextStyle.copyWith(
+                fontSize: 32,
+                fontWeight: semiBold,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget Um() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          um++;
+        });
+      },
+      child: Container(
+        width: double.infinity,
+        height: 200,
+        padding: EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: secondaryColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              "assets/sepeda-icon.png",
+              width: 100,
+            ),
+            Text(
+              'Unmotorized (UM)',
+              style: whiteTextStyle.copyWith(
+                fontWeight: semiBold,
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              '${um}',
+              style: whiteTextStyle.copyWith(
+                fontSize: 32,
+                fontWeight: semiBold,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget Vihecle1() {
+    if (widget.vihecle.first == 'MC') {
+      return Mc();
+    } else if (widget.vihecle.first == 'LV') {
+      return Lv();
+    } else if (widget.vihecle.first == 'HV') {
+      return Hv();
+    } else {
+      return Um();
+    }
+  }
+
+  Widget Vihecle2() {
+    if (widget.vihecle.last == 'MC') {
+      return Mc();
+    } else if (widget.vihecle.last == 'LV') {
+      return Lv();
+    } else if (widget.vihecle.last == 'HV') {
+      return Hv();
+    } else {
+      return Um();
+    }
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgorundColor,
@@ -357,7 +468,7 @@ class _UMScreenState extends State<UMScreen> {
         backgroundColor: primaryColor,
         centerTitle: true,
         title: Text(
-          "Unmotorized (UM)",
+          "Input Kendaraan",
           style: whiteTextStyle.copyWith(
             fontSize: 16,
             fontWeight: semiBold,
@@ -391,28 +502,9 @@ class _UMScreenState extends State<UMScreen> {
           child: Column(
             children: [
               containerHeader(),
-              vihicle(),
-              GestureDetector(
-                onTap: reset,
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                  width: double.infinity,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: secondaryColor,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Reset',
-                      style: whiteTextStyle.copyWith(
-                        fontSize: 16,
-                        fontWeight: bold,
-                      ),
-                    ),
-                  ),
-                ),
-              )
+              Vihecle1(),
+              SizedBox(height: 20),
+              isVihecle2 ? Vihecle2() : SizedBox(),
             ],
           ),
         ),

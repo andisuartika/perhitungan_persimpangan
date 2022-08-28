@@ -1,5 +1,6 @@
 import 'package:gsheets/gsheets.dart';
 import 'package:perhitungan_persimpangan/models/lv_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SheetsApi {
   static const _credentials = r'''
@@ -16,6 +17,7 @@ class SheetsApi {
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/gsheets%40gsheets-358606.iam.gserviceaccount.com"
 }
 ''';
+
   static final _spreadsheetId = '1lOvBU4DSzNAgZ4_oF8EvCNs_FrrUHfTZZLcEw8tsBHU';
   static final _gheets = GSheets(_credentials);
   static Worksheet? _dataInput;
@@ -33,7 +35,9 @@ class SheetsApi {
   }
 
   static Future getSimpangName(String simpang) async {
-    final spreadsheet = await _gheets.spreadsheet(_spreadsheetId);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var sheetId = prefs.getString('sheetId')!;
+    final spreadsheet = await _gheets.spreadsheet(sheetId);
     var sheet = spreadsheet.worksheetByTitle('KAKI-SIMPANG-$simpang');
     return await sheet!.values.value(column: 5, row: 2);
   }
@@ -51,7 +55,10 @@ class SheetsApi {
 
   static Future updateName(String namaSimpang, simpang) async {
     // _dataInput!.values.map.appendRows(rowList);
-    final spreadsheet = await _gheets.spreadsheet(_spreadsheetId);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var sheetId = prefs.getString('sheetId')!;
+
+    final spreadsheet = await _gheets.spreadsheet(sheetId);
     var sheet = spreadsheet.worksheetByTitle('KAKI-SIMPANG-$simpang');
     await sheet!.values.insertValue(namaSimpang, column: 5, row: 2);
   }
@@ -63,7 +70,10 @@ class SheetsApi {
   ) async {
     print('SIMPANG : $simpang');
 
-    final spreadsheet = await _gheets.spreadsheet(_spreadsheetId);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var sheetId = prefs.getString('sheetId')!;
+
+    final spreadsheet = await _gheets.spreadsheet(sheetId);
     var sheet = spreadsheet.worksheetByTitle('KAKI-SIMPANG-$simpang');
     return sheet!.values.map.insertRowByKey(id, data, fromColumn: 4);
   }
@@ -74,8 +84,9 @@ class SheetsApi {
     Map<String, dynamic> data,
   ) async {
     print('SIMPANG : $simpang');
-
-    final spreadsheet = await _gheets.spreadsheet(_spreadsheetId);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var sheetId = prefs.getString('sheetId')!;
+    final spreadsheet = await _gheets.spreadsheet(sheetId);
     var sheet = spreadsheet.worksheetByTitle('KAKI-SIMPANG-$simpang');
     return sheet!.values.map.insertRowByKey(id, data, fromColumn: 5);
   }
@@ -86,8 +97,9 @@ class SheetsApi {
     Map<String, dynamic> data,
   ) async {
     print('SIMPANG : $simpang');
-
-    final spreadsheet = await _gheets.spreadsheet(_spreadsheetId);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var sheetId = prefs.getString('sheetId')!;
+    final spreadsheet = await _gheets.spreadsheet(sheetId);
     var sheet = spreadsheet.worksheetByTitle('KAKI-SIMPANG-$simpang');
     return sheet!.values.map.insertRowByKey(id, data, fromColumn: 11);
   }
@@ -98,8 +110,10 @@ class SheetsApi {
     Map<String, dynamic> data,
   ) async {
     print('SIMPANG : $simpang');
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var sheetId = prefs.getString('sheetId')!;
 
-    final spreadsheet = await _gheets.spreadsheet(_spreadsheetId);
+    final spreadsheet = await _gheets.spreadsheet(sheetId);
     var sheet = spreadsheet.worksheetByTitle('KAKI-SIMPANG-$simpang');
     return sheet!.values.map.insertRowByKey(id, data, fromColumn: 15);
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:perhitungan_persimpangan/api/sheets/sheets_api.dart';
 import 'package:perhitungan_persimpangan/data/key.dart';
 import 'package:perhitungan_persimpangan/models/lv_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../theme.dart';
@@ -20,6 +21,7 @@ class HVScreen extends StatefulWidget {
 class _HVScreenState extends State<HVScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController namaSimpang = TextEditingController(text: '');
+  String textArah = '';
   int totalTraffic = 0;
   int bus = 0;
   int truckSedang = 0;
@@ -41,17 +43,29 @@ class _HVScreenState extends State<HVScreen> {
   void initState() {
     // TODO: implement initState
     getSimpang();
+
+    // CONVERT TEXT ARAH
+    if (widget.arah == 'Kiri') {
+      textArah = 'Belok Kiri';
+    } else if (widget.arah == 'Kanan') {
+      textArah = 'Belok Kanan';
+    } else {
+      textArah = 'Lurus';
+    }
+
     super.initState();
   }
 
   // LAUNCH URL
   Future<void> _launchInBrowser() async {
-    const url =
-        'https://docs.google.com/spreadsheets/d/1lOvBU4DSzNAgZ4_oF8EvCNs_FrrUHfTZZLcEw8tsBHU/export?format=xlsx'; //LINK DOWNLOAD
-    if (await canLaunch(url)) {
-      await launch(url);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var sheetId = prefs.getString('sheetId')!;
+    var link =
+        'https://docs.google.com/spreadsheets/d/${sheetId.toString()}/export?format=xlsx'; //LINK DOWNLOAD
+    if (await canLaunch(link)) {
+      await launch(link);
     } else {
-      throw 'Could not launch $url';
+      throw 'Could not launch $link';
     }
   }
 
@@ -84,7 +98,7 @@ class _HVScreenState extends State<HVScreen> {
             style: whiteTextStyle.copyWith(fontSize: 14, fontWeight: bold),
           ),
           Text(
-            "(${widget.arah.toUpperCase()})",
+            "(${textArah.toUpperCase()})",
             style: whiteTextStyle.copyWith(fontWeight: semiBold),
           ),
           SizedBox(
@@ -220,10 +234,6 @@ class _HVScreenState extends State<HVScreen> {
                         LvModel.id: 1,
                         LvModel.namaSimpang: namaSimpang.text,
                         LvModel.waktu: selectedTime,
-                        LvModel.busSedang: bus,
-                        LvModel.truckSedang: truckSedang,
-                        LvModel.truckBesar: truckBesar,
-                        LvModel.container20feet: container20Feet,
                       };
                       await SheetsApi.updateHv(id, widget.simpang, data);
 
@@ -540,7 +550,7 @@ class _HVScreenState extends State<HVScreen> {
         backgroundColor: primaryColor,
         centerTitle: true,
         title: Text(
-          "High Vehicle (LV)",
+          "High Vehicle (HV)",
           style: whiteTextStyle.copyWith(
             fontSize: 16,
             fontWeight: semiBold,

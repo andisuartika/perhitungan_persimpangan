@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:perhitungan_persimpangan/screen/jenis_kendaraan_screen.dart';
-import 'package:perhitungan_persimpangan/theme.dart';
+import 'package:perhitungan_persimpangan/screen/kaki_simpang_screen.dart';
 
-class KakiSimpangScreen extends StatefulWidget {
+import '../theme.dart';
+
+class PersimpanganScreen extends StatefulWidget {
   final String namaSimpang;
-  final String simpang;
-  const KakiSimpangScreen(
-      {Key? key, required this.simpang, required this.namaSimpang})
+  const PersimpanganScreen({Key? key, required this.namaSimpang})
       : super(key: key);
 
   @override
-  State<KakiSimpangScreen> createState() => _KakiSimpangScreenState();
+  State<PersimpanganScreen> createState() => _PersimpanganScreenState();
 }
 
-class _KakiSimpangScreenState extends State<KakiSimpangScreen> {
+class _PersimpanganScreenState extends State<PersimpanganScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +21,7 @@ class _KakiSimpangScreenState extends State<KakiSimpangScreen> {
         backgroundColor: primaryColor,
         centerTitle: true,
         title: Text(
-          'KAKI SIMPANG ${widget.simpang}',
+          'KAKI SIMPANG',
           style: whiteTextStyle.copyWith(
             fontSize: 16,
             fontWeight: semiBold,
@@ -41,7 +40,7 @@ class _KakiSimpangScreenState extends State<KakiSimpangScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Silahkan Pilih Arah",
+              "Silahkan Pilih Persimpangan",
               style:
                   primaryTextStyle.copyWith(fontSize: 12, fontWeight: semiBold),
             ),
@@ -53,50 +52,8 @@ class _KakiSimpangScreenState extends State<KakiSimpangScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => JenisKendaraanScreen(
-                        namaSimpang: widget.namaSimpang,
-                        simpang: widget.simpang,
-                        arah: "Kiri"),
-                  ),
-                );
-              },
-              child: Container(
-                height: 85,
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: primaryColor,
-                ),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      "assets/timur-icon.png",
-                      height: 32,
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Text(
-                      "Belok Kiri",
-                      style: whiteTextStyle.copyWith(
-                        fontSize: 18,
-                        fontWeight: semiBold,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => JenisKendaraanScreen(
-                        namaSimpang: widget.namaSimpang,
-                        simpang: widget.simpang,
-                        arah: "Lurus"),
+                    builder: (context) => KakiSimpangScreen(
+                        namaSimpang: widget.namaSimpang, simpang: "SELATAN"),
                   ),
                 );
               },
@@ -117,7 +74,7 @@ class _KakiSimpangScreenState extends State<KakiSimpangScreen> {
                       width: 15,
                     ),
                     Text(
-                      "Lurus",
+                      "Kaki Simpang Selatan",
                       style: whiteTextStyle.copyWith(
                         fontSize: 18,
                         fontWeight: semiBold,
@@ -133,10 +90,84 @@ class _KakiSimpangScreenState extends State<KakiSimpangScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => JenisKendaraanScreen(
-                        namaSimpang: widget.namaSimpang,
-                        simpang: widget.simpang,
-                        arah: "Kanan"),
+                    builder: (context) => KakiSimpangScreen(
+                        namaSimpang: widget.namaSimpang, simpang: "UTARA"),
+                  ),
+                );
+              },
+              child: Container(
+                height: 85,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: primaryColor,
+                ),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      "assets/utara-icon.png",
+                      height: 32,
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      "Kaki Simpang Utara",
+                      style: whiteTextStyle.copyWith(
+                        fontSize: 18,
+                        fontWeight: semiBold,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => KakiSimpangScreen(
+                        namaSimpang: widget.namaSimpang, simpang: "TIMUR"),
+                  ),
+                );
+              },
+              child: Container(
+                height: 85,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: primaryColor,
+                ),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      "assets/timur-icon.png",
+                      height: 32,
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      "Kaki Simpang Timur",
+                      style: whiteTextStyle.copyWith(
+                        fontSize: 18,
+                        fontWeight: semiBold,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => KakiSimpangScreen(
+                        namaSimpang: widget.namaSimpang, simpang: "BARAT"),
                   ),
                 );
               },
@@ -157,7 +188,7 @@ class _KakiSimpangScreenState extends State<KakiSimpangScreen> {
                       width: 15,
                     ),
                     Text(
-                      "Belok Kanan",
+                      "Kaki Simpang Barat",
                       style: whiteTextStyle.copyWith(
                         fontSize: 18,
                         fontWeight: semiBold,
@@ -167,6 +198,7 @@ class _KakiSimpangScreenState extends State<KakiSimpangScreen> {
                 ),
               ),
             ),
+            SizedBox(height: 20),
           ],
         ),
       ),

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:perhitungan_persimpangan/screen/home_screen.dart';
 import 'package:perhitungan_persimpangan/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -14,11 +14,22 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
+    cekLogin();
     super.initState();
   }
 
+  cekLogin() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return bool
+    bool isLogin = prefs.getBool('isLogin') ?? false;
+
+    isLogin
+        ? Navigator.pushNamed(context, '/home')
+        : Navigator.pushNamed(context, '/login');
+  }
+
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 5), () => Navigator.pushNamed(context, '/sign-up'));
+    // Timer(Duration(seconds: 5), () => Navigator.pushNamed(context, '/login'));
     return Scaffold(
       backgroundColor: primaryColor,
       body: Center(
@@ -33,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
               height: 30,
             ),
             Text(
-              "Perhitungan\n Persimpangan",
+              "Traffic Count Analyzer",
               style: whiteTextStyle.copyWith(
                 fontWeight: semiBold,
                 fontSize: 20,

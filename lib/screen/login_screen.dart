@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:perhitungan_persimpangan/screen/access_code_screen.dart';
 import 'package:perhitungan_persimpangan/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -9,11 +12,18 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
+  final formkey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController(text: '');
   TextEditingController passwordController = TextEditingController(text: '');
   bool hidden = true;
   @override
+  // void dispose() {
+  //   emailController.dispose();
+  //   passwordController.dispose();
+
+  //   super.dispose();
+  // }
+
   // HIDDEN PASSWORD
   passwordHidden() async {
     setState(() {
@@ -22,6 +32,70 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget build(BuildContext context) {
+    Future login() async {
+      // LOADING
+      showDialog(
+        context: context,
+        builder: (context) => Center(
+          child: CircularProgressIndicator(
+            color: primaryColor,
+          ),
+        ),
+      );
+
+      try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim());
+
+        // SHARED PREFERENCES
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setBool('isLogin', true);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Login Success!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => AccessCodeScreen()),
+            (route) => false);
+      } on FirebaseAuthException catch (e) {
+        Navigator.pop(context);
+        print('Failed with error code: ${e.code}');
+        switch (e.code) {
+          case "user-not-found":
+            return ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Email tidak terdaftar!'),
+                backgroundColor: Colors.red,
+              ),
+            );
+            break;
+          case "wrong-password":
+            return ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Password salah!'),
+                backgroundColor: Colors.red,
+              ),
+            );
+            break;
+          case "too-many-requests":
+            return ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(e.code),
+                backgroundColor: Colors.red,
+              ),
+            );
+            break;
+        }
+        print(e.message);
+      }
+    }
+
     // HEADER
     Widget header() {
       return Container(
@@ -41,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             Text(
-              'Selamat datang,\n Aplikasi Perhitungan Persimpangan',
+              'Selamat datang,\n Traffic Count Analyzer',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: semiBold,
@@ -138,7 +212,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Kata Sandi',
+                    'Password',
                     style: primaryTextStyle.copyWith(
                       fontSize: 12,
                       fontWeight: semiBold,
@@ -156,14 +230,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return "Masukkan kata sandi";
+                          return "Masukkan password";
                         }
                         return null;
                       },
                       decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.fromLTRB(0.0, 10.0, 20.0, 10.0),
-                        hintText: 'Masukkan Kata sandi',
+                        hintText: 'Masukkan password',
                         hintStyle: primaryTextStyle.copyWith(
                           color: Colors.grey,
                           fontSize: 12,
@@ -211,7 +285,12 @@ class _LoginScreenState extends State<LoginScreen> {
         width: double.infinity,
         child: TextButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/access-code');
+            if (emailController.text != null &&
+                passwordController.text != null) {
+              login();
+            }
+
+            // Navigator.pushNamed(context, '/access-code');
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,

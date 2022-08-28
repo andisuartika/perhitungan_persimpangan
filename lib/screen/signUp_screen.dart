@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:perhitungan_persimpangan/screen/access_code_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../theme.dart';
 
@@ -11,11 +14,60 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController usernameController = TextEditingController(text: '');
   TextEditingController emailController = TextEditingController(text: '');
   TextEditingController passwordController = TextEditingController(text: '');
   @override
   Widget build(BuildContext context) {
+    // SIGNUP
+    Future signUp() async {
+      // LOADING
+      showDialog(
+        context: context,
+        builder: (context) => Center(
+          child: CircularProgressIndicator(
+            color: primaryColor,
+          ),
+        ),
+      );
+
+      try {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+
+        // SHARED PREFERENCES
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setBool('isLogin', true);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Sign Up Success!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => AccessCodeScreen()),
+            (route) => false);
+      } on FirebaseAuthException catch (e) {
+        Navigator.pop(context);
+
+        print(e.code);
+        switch (e.code) {
+          case "email-already-in-use":
+            return ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Email telah terdaftar!'),
+                backgroundColor: Colors.red,
+              ),
+            );
+            break;
+        }
+      }
+    }
+
     // HEADER
     Widget header() {
       return Container(
@@ -66,62 +118,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return Container(
         child: Column(
           children: [
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Username',
-                    style: primaryTextStyle.copyWith(
-                      fontSize: 12,
-                      fontWeight: semiBold,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 3,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    child: TextFormField(
-                      cursorColor: primaryTextColor,
-                      keyboardType: TextInputType.text,
-                      controller: usernameController,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (value) {
-                        // NULL
-                        if (value!.isEmpty) {
-                          return "Masukkan username";
-                        }
-
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.fromLTRB(0.0, 10.0, 20.0, 10.0),
-                        hintText: 'Masukkan Username',
-                        hintStyle: primaryTextStyle.copyWith(
-                          color: Colors.grey,
-                          fontSize: 12,
-                          fontWeight: regular,
-                        ),
-                        fillColor: backgorundFieldColor,
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(
-                            12,
-                          ),
-                        ),
-                        prefixIcon: Icon(
-                          Icons.person,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
             Container(
               margin: EdgeInsets.only(top: 20),
               child: Column(
@@ -192,7 +188,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Kata Sandi',
+                    'Password',
                     style: primaryTextStyle.copyWith(
                       fontSize: 12,
                       fontWeight: semiBold,
@@ -210,14 +206,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return "Masukkan kata sandi";
+                          return "Masukkan password";
+                        }
+
+                        // at least 7 char
+                        if (value.length < 8) {
+                          return 'Password harus lebih dari 7 karakter';
                         }
                         return null;
                       },
                       decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.fromLTRB(0.0, 10.0, 20.0, 10.0),
-                        hintText: 'Masukkan Kata sandi',
+                        hintText: 'Masukkan password',
                         hintStyle: primaryTextStyle.copyWith(
                           color: Colors.grey,
                           fontSize: 12,
@@ -283,7 +284,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         width: double.infinity,
         child: TextButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/access-code');
+            signUp();
+            // Navigator.pushNamed(context, '/access-code');
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,

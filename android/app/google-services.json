@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "187543110482",
+    "project_id": "perhitungan-persimpangan",
+    "storage_bucket": "perhitungan-persimpangan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:187543110482:android:a2ccc6bc87d762f76a708b",
+        "android_client_info": {
+          "package_name": "com.example.perhitungan_persimpangan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "187543110482-1uk47ckuq6oanpng3hseg6ma7vjo66em.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwz8u7P_iqPi0LHvl_W6pQleW7XR4DUFk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "187543110482-1uk47ckuq6oanpng3hseg6ma7vjo66em.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,6 +4,7 @@ import 'package:perhitungan_persimpangan/api/sheets/sheets_api.dart';
 import 'package:perhitungan_persimpangan/data/key.dart';
 import 'package:perhitungan_persimpangan/models/lv_model.dart';
 import 'package:perhitungan_persimpangan/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LvScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class LvScreen extends StatefulWidget {
 class _LvScreenState extends State<LvScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController namaSimpang = TextEditingController(text: '');
-  String namaSimpangSheet = '';
+  String textArah = '';
   int totalTraffic = 0;
   int mobil = 0;
   int doubleCabin = 0;
@@ -45,17 +46,30 @@ class _LvScreenState extends State<LvScreen> {
   void initState() {
     // TODO: implement initState
     getSimpang();
+
+    // CONVERT TEXT ARAH
+    if (widget.arah == 'Kiri') {
+      textArah = 'Belok Kiri';
+    } else if (widget.arah == 'Kanan') {
+      textArah = 'Belok Kanan';
+    } else {
+      textArah = 'Lurus';
+    }
+
     super.initState();
   }
 
   // LAUNCH URL
   Future<void> _launchInBrowser() async {
-    const url =
-        'https://docs.google.com/spreadsheets/d/1lOvBU4DSzNAgZ4_oF8EvCNs_FrrUHfTZZLcEw8tsBHU/export?format=xlsx'; //LINK DOWNLOAD
-    if (await canLaunch(url)) {
-      await launch(url);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return bool
+    var sheetId = prefs.getString('sheetId')!;
+    var link =
+        'https://docs.google.com/spreadsheets/d/${sheetId.toString()}/export?format=xlsx'; //LINK DOWNLOAD
+    if (await canLaunch(link)) {
+      await launch(link);
     } else {
-      throw 'Could not launch $url';
+      throw 'Could not launch $link';
     }
   }
 
@@ -91,7 +105,7 @@ class _LvScreenState extends State<LvScreen> {
             style: whiteTextStyle.copyWith(fontSize: 14, fontWeight: bold),
           ),
           Text(
-            "(${widget.arah.toUpperCase()})",
+            "(${textArah.toUpperCase()})",
             style: whiteTextStyle.copyWith(fontWeight: semiBold),
           ),
           SizedBox(
@@ -227,12 +241,7 @@ class _LvScreenState extends State<LvScreen> {
                         LvModel.id: 1,
                         LvModel.namaSimpang: namaSimpang.text,
                         LvModel.waktu: selectedTime,
-                        LvModel.mobil: mobil,
-                        LvModel.mpu: mpu,
-                        LvModel.pickup: pickUp,
-                        LvModel.truckKecil: miniTruck,
-                        LvModel.busKecil: miniBus,
-                        LvModel.doubleKabin: doubleCabin,
+                        
                       };
                       await SheetsApi.updateLv(id, widget.simpang, data);
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:perhitungan_persimpangan/data/access-code.dart';
 import 'package:perhitungan_persimpangan/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AccessCodeScreen extends StatefulWidget {
   const AccessCodeScreen({Key? key}) : super(key: key);
@@ -81,8 +83,32 @@ class _AccessCodeScreenState extends State<AccessCodeScreen> {
                 height: 50,
                 width: double.infinity,
                 child: TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/home');
+                  onPressed: () async {
+                    if (codeController.text != null) {
+                      var sheet = AccessCode.accesCode.where((prod) =>
+                          prod["code"] ==
+                          '${codeController.text.toUpperCase()}');
+                      if (sheet.isNotEmpty) {
+                        var sheetId = sheet.single['sheetId'];
+                        print(sheetId);
+
+                        // SHARED PREFERENCES
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        prefs.setString('sheetId', sheetId);
+                        prefs.setString(
+                            'access-code', codeController.text.toUpperCase());
+
+                        Navigator.pushNamed(context, '/home');
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Kode akses tidak tersedia!'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    }
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: primaryColor,
